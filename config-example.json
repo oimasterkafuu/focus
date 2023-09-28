@@ -1,0 +1,4 @@
+{
+    "api-key": "sk-your-api-key",
+    "server-url": "https://api.openai.com/v1/chat/completions"
+}

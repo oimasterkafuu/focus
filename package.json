@@ -1,0 +1,24 @@
+{
+    "name": "focus",
+    "version": "1.0.0",
+    "description": "An AI-powered focus app which can help you plan your time better.",
+    "main": "index.js",
+    "repository": "https://github.com/oimasterkafuu/focus",
+    "author": "oimasterkafuu",
+    "license": "MIT",
+    "scripts": {
+        "format": "prettier --write \"**/*.{js,vue,html,css,scss,json,md,yml}\"",
+        "test": "mocha"
+    },
+    "devDependencies": {
+        "chai": "^4.3.10",
+        "cz-conventional-changelog": "^3.3.0",
+        "mocha": "^10.2.0",
+        "prettier": "^3.0.3"
+    },
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-conventional-changelog"
+        }
+    }
+}
