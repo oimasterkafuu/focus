@@ -8,7 +8,7 @@ myHeaders.append('User-Agent', 'Mozilla/5.0');
 myHeaders.append('Content-Type', 'application/json');
 
 async function fetchChatGPT(content) {
-    if(!content) return null;
+    if (!content) return null;
 
     let raw = JSON.stringify({
         model: 'gpt-3.5-turbo',
@@ -41,8 +41,8 @@ async function fetchChatGPT(content) {
 }
 
 async function fetchSteps(content) {
-    if(!content) return null;
-    
+    if (!content) return null;
+
     let result =
         await fetchChatGPT(`You are the assistant of the FOCUS app. The user will provide you his/her tasks. You should answer in a json array where each item is in the format {"time": "Time required in minutes", "detail": "Single step task required to complete"}.
 Use the user's language to provide the details.
