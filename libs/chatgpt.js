@@ -1,4 +1,5 @@
 const config = require('../config');
+const { fetchWithCache } = require('./fetch-cache');
 const key = config['api-key'];
 const server = config['server-url'];
 
@@ -28,9 +29,7 @@ async function fetchChatGPT(content) {
     };
 
     try {
-        let response = await fetch(server, requestOptions);
-        let text = await response.text();
-        let result = JSON.parse(text);
+        let result = await fetchWithCache(server, requestOptions);
         let message = result.choices[0].message.content;
         let parsed = JSON.parse(message);
         return parsed;

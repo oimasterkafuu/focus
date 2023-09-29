@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
 config.json
+data/cache.json
 
 # local env files
 .env.local
