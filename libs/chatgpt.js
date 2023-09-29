@@ -1,4 +1,4 @@
-const config = require('../config.json');
+const config = require('../config');
 const key = config['api-key'];
 const server = config['server-url'];
 
