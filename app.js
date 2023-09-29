@@ -5,8 +5,10 @@ const { apiRouter } = require('./routers/api');
 const app = express();
 app.use(bodyParser.json());
 
+app.set('view engine', 'ejs');
+
 app.get('/', (req, res) => {
-    res.send('It works!');
+    res.render('index');
 });
 
 app.use('/api/', apiRouter);

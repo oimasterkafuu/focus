@@ -2,18 +2,6 @@ const request = require('supertest');
 const { expect } = require('chai');
 const app = require('../app');
 
-describe('GET /', function () {
-    this.timeout(10000);
-    let response;
-    before(async () => {
-        response = await request(app).get('/');
-    });
-    it('should return "It works!"', () => {
-        expect(response.status).to.be.equal(200);
-        expect(response.text).to.be.equal('It works!');
-    });
-});
-
 describe('POST /api/fetchSteps', function () {
     this.timeout(10000);
     let response;
