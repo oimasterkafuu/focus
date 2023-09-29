@@ -6,11 +6,23 @@ What do you want to do today?
 <button id="submit">Submit</button>
 
 <div>
+    <ul id="pre-list"></ul>
+    <button id="confirm" style="display: none">Confirm</button>
+</div>
+
+<div>
     <ul id="todo-list"></ul>
 </div>
 
+<style>
+    input:not(.check) {
+        width: 200px;
+    }
+</style>
+
 <script>
-    $('#submit').click(function () {
+    let steps = [];
+    $('#submit').click(() => {
         $.ajax({
             url: '/api/fetchSteps/',
             type: 'POST',
@@ -23,11 +35,56 @@ What do you want to do today?
                     alert('error');
                     return;
                 }
-                let steps = data.steps;
+                steps = data.steps;
+                $('#pre-list').empty();
                 $('#todo-list').empty();
+                $('#confirm').show();
                 for (let i = 0; i < steps.length; i++) {
-                    $('#todo-list').append(`<li id="step${i}">${steps[i].detail} (${steps[i].time} minutes)</li>`);
+                    $('#pre-list').append(`
+                    <li>
+                        <input type="text" value="${steps[i].detail}" class="detail" step-id="${i}"/>
+                        <input type="number" value="${steps[i].time}" class="time" step-id="${i}"/>
+                    </li>`);
                 }
+
+                $('.detail').change((e) => {
+                    let id = $(e.target).attr('step-id');
+                    let detail = $(e.target).val();
+                    steps[id].detail = detail;
+                    console.log(steps);
+                });
+                $('.time').change((e) => {
+                    let id = $(e.target).attr('step-id');
+                    let time = $(e.target).val();
+                    steps[id].time = time;
+                    console.log(steps);
+                });
+            }
+        });
+    });
+
+    $('#confirm').click(() => {
+        $('#todo-list').empty();
+        $('#pre-list').empty();
+        $('#confirm').hide();
+        for (let i = 0; i < steps.length; i++) {
+            $('#todo-list').append(`
+            <li>
+                <input type="checkbox" class="check" step-id="${i}"/>
+                ${steps[i].detail}
+                -
+                ${steps[i].time} minutes
+            </li>`);
+        }
+
+        $('.check').change((e) => {
+            let id = $(e.target).attr('step-id');
+            let checked = $(e.target).is(':checked');
+            steps[id].finished = checked;
+
+            if (steps.every((step) => step.finished)) {
+                alert('Great!');
+                location.reload();
             }
         });
     });
