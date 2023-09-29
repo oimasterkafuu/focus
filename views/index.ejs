@@ -5,6 +5,10 @@ What do you want to do today?
 <input type="text" placeholder="Enter your task" id="task" />
 <button id="submit">Submit</button>
 
+<div>
+    <ul id="todo-list"></ul>
+</div>
+
 <script>
     $('#submit').click(function () {
         $.ajax({
@@ -15,6 +19,15 @@ What do you want to do today?
             },
             success: (data) => {
                 console.log(data);
+                if (!data.success) {
+                    alert('error');
+                    return;
+                }
+                let steps = data.steps;
+                $('#todo-list').empty();
+                for (let i = 0; i < steps.length; i++) {
+                    $('#todo-list').append(`<li id="step${i}">${steps[i].detail} (${steps[i].time} minutes)</li>`);
+                }
             }
         });
     });
