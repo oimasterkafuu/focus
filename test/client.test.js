@@ -8,10 +8,12 @@ describe('POST /api/fetchSteps', function () {
     before(async () => {
         response = await request(app)
             .post('/api/fetchSteps/')
+            .type('form')
             .send({ task: 'Finish my four-page math homework in an hour' });
     });
     it('should return steps', () => {
         expect(response.status).to.be.equal(200);
+        expect(response.body).to.be.an('object');
         expect(response.body.success).to.be.equal(true);
     });
 });
