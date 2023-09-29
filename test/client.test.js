@@ -13,6 +13,5 @@ describe('POST /api/fetchSteps', function () {
     it('should return steps', () => {
         expect(response.status).to.be.equal(200);
         expect(response.body.success).to.be.equal(true);
-        console.log(response.body.steps);
     });
 });
