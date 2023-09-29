@@ -14,11 +14,15 @@
         "chai": "^4.3.10",
         "cz-conventional-changelog": "^3.3.0",
         "mocha": "^10.2.0",
-        "prettier": "^3.0.3"
+        "prettier": "^3.0.3",
+        "supertest": "^6.3.3"
     },
     "config": {
         "commitizen": {
             "path": "./node_modules/cz-conventional-changelog"
         }
+    },
+    "dependencies": {
+        "express": "^4.18.2"
     }
 }
