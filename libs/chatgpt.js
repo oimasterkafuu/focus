@@ -8,7 +8,7 @@ myHeaders.append('User-Agent', 'Mozilla/5.0');
 myHeaders.append('Content-Type', 'application/json');
 
 async function fetchChatGPT(content) {
-    const raw = JSON.stringify({
+    let raw = JSON.stringify({
         model: 'gpt-3.5-turbo',
         messages: [
             {
@@ -18,7 +18,7 @@ async function fetchChatGPT(content) {
         ]
     });
 
-    const requestOptions = {
+    let requestOptions = {
         method: 'POST',
         headers: myHeaders,
         body: raw,
