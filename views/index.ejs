@@ -1,3 +1,23 @@
 <%- include("components/header.ejs") %>
-Hello, world
+
+What do you want to do today?
+
+<input type="text" placeholder="Enter your task" id="task" />
+<button id="submit">Submit</button>
+
+<script>
+    $('#submit').click(function () {
+        $.ajax({
+            url: '/api/fetchSteps/',
+            type: 'POST',
+            data: {
+                task: $('#task').val()
+            },
+            success: (data) => {
+                console.log(data);
+            }
+        });
+    });
+</script>
+
 <%- include("components/footer.ejs") %>
