@@ -27,7 +27,7 @@ describe('Test fetch hints', function () {
     it('should return an array of details', () => {
         expect(chat).to.be.an('array');
     });
-    it(`should return at least 5 items`, () => {
-        expect(chat.length).to.be.at.least(5);
+    it(`should return exactly 5 items`, () => {
+        expect(chat.length).to.equal(5);
     });
 });

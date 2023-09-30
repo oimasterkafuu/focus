@@ -55,7 +55,7 @@ async function fetchHints(content) {
     if (!content) return null;
 
     let result =
-        await fetchChatGPT(`You are the assistant of the FOCUS app. The user will provide you a vague task. You should answer in a json array where each item is a question to ask the user for more detail. The array should have at least 5 items.
+        await fetchChatGPT(`You are the assistant of the FOCUS app. The user will provide you a vague task. You should answer in a json array where each item is a question to ask the user for more detail. The array should have exactly 5 items.
 Use the user's language to ask the questions.
 For example, if the user says {{do my homework}}
 You should answer ["What subject is your homework?", "How many assignments do you have?", "What are the requirements for each assignment?", "How much time do you have to finish them?", "Do you need any help or resources?"] (a valid JSON of several questions, not containing any other character)
