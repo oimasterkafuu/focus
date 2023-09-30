@@ -48,7 +48,7 @@ const headerText = {
     async text(s) {
         await $('#header-text').text(s).promise();
     },
-    async flow() {
+    async float() {
         await $('#header-text')
             .css({
                 transform: 'translateY(100%)'
@@ -57,15 +57,112 @@ const headerText = {
         await $('#header-text')
             .animate(
                 {
+                    dummy: 0
+                },
+                0
+            )
+            .promise();
+        await $('#header-text')
+            .animate(
+                {
                     dummy: 1
                 },
                 {
                     duration: 700,
-                    step: function (value, fx) {
+                    step: function (value) {
                         $(this).css('transform', 'translateY(' + (1 - value) * 100 + '%)');
                     }
                 }
             )
             .promise();
+    },
+    async sink() {
+        await $('#header-text')
+            .animate(
+                {
+                    dummy: 0
+                },
+                0
+            )
+            .promise();
+        await $('#header-text')
+            .animate(
+                {
+                    dummy: 1
+                },
+                {
+                    duration: 700,
+                    step: function (value) {
+                        $(this).css('transform', 'translateY(' + value * 100 + '%)');
+                    }
+                }
+            )
+            .promise();
+    }
+};
+
+const taskInput = {
+    async show() {
+        await $('#task-input')
+            .animate(
+                {
+                    opacity: 1
+                },
+                700
+            )
+            .promise();
+    }
+};
+
+const hintsList = {
+    existElements: [],
+    async display(hints) {
+        if (this.existElements.length !== hints.length) {
+            await $('#hints-list').empty().promise();
+            await $('#hints-list')
+                .css({
+                    opacity: 0
+                })
+                .promise();
+            for (let i = 0; i < hints.length; i++) {
+                await $('#hints-list').append(`<li class="hint" hint-id="${i}">${hints[i]}</li>`).promise();
+            }
+            await $('#hints-list')
+                .animate(
+                    {
+                        opacity: 1
+                    },
+                    700
+                )
+                .promise();
+            this.existElements = hints;
+        } else {
+            this.existElements = matcher(this.existElements, hints);
+            for (let i = 0; i < this.existElements.length; i++) {
+                let oldContent = $('#hints-list li[hint-id="' + i + '"]').text();
+                let newContent = this.existElements[i];
+                if (oldContent !== newContent) {
+                    await $('#hints-list li[hint-id="' + i + '"]')
+                        .animate(
+                            {
+                                opacity: 0
+                            },
+                            350
+                        )
+                        .promise();
+                    await $('#hints-list li[hint-id="' + i + '"]')
+                        .text(newContent)
+                        .promise();
+                    await $('#hints-list li[hint-id="' + i + '"]')
+                        .animate(
+                            {
+                                opacity: 1
+                            },
+                            350
+                        )
+                        .promise();
+                }
+            }
+        }
     }
 };

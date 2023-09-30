@@ -30,3 +30,31 @@ body {
     transform: translateX(-50%);
     font-size: var(--header-size);
 }
+
+#task-input {
+    position: absolute;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, 20px);
+    width: 70vw;
+
+    font-size: var(--font-size);
+    font-family: var(--font-family);
+    text-align: center;
+
+    background-color: var(--input-background-color);
+    color: var(--font-color);
+
+    border: none;
+    border-radius: calc(var(--font-size) * 3 / 2);
+    outline: none;
+    padding: var(--font-size);
+}
+
+#hints-list {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%);
+    width: 40vw;
+}

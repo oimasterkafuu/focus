@@ -9,3 +9,11 @@
 #header-text {
     transform: translateY(100%);
 }
+
+#task-input {
+    opacity: 0;
+}
+
+#hints-list {
+    opacity: 0;
+}
