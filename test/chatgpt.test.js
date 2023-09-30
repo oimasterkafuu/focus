@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const { fetchSteps } = require('../libs/chatgpt');
+const { fetchSteps, fetchHints } = require('../libs/chatgpt');
 
 describe('Test fetch steps', function () {
     this.timeout(10000);
@@ -15,5 +15,19 @@ describe('Test fetch steps', function () {
         chat.forEach((step) => {
             expect(step).to.have.all.keys('time', 'detail');
         });
+    });
+});
+
+describe('Test fetch hints', function () {
+    this.timeout(10000);
+    let chat;
+    before(async () => {
+        chat = await fetchHints('Finish my homework');
+    });
+    it('should return an array of details', () => {
+        expect(chat).to.be.an('array');
+    });
+    it(`should return at least 5 items`, () => {
+        expect(chat.length).to.be.at.least(5);
     });
 });
