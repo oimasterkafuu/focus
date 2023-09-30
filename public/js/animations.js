@@ -111,6 +111,8 @@ const taskInput = {
                 700
             )
             .promise();
+        await sleep(400);
+        await $('#task-input').focus().promise();
     }
 };
 
