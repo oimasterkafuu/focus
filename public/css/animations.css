@@ -1,0 +1,7 @@
+#dynamic-shape {
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+
+    top: 50%;
+}
