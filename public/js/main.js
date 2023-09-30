@@ -7,7 +7,7 @@ $(async () => {
     await headerText.float();
     await sleep(1000);
     await headerText.sink();
-    await headerText.text('现在想做什么?');
+    await headerText.text('现在想做什么？');
     await runAll(headerText.float, async () => {
         await sleep(400);
         await taskInput.show();
@@ -27,7 +27,7 @@ $(async () => {
                     if (headerChanged) {
                         headerChanged = false;
                         await headerText.sink();
-                        await headerText.text('现在想做什么?');
+                        await headerText.text('现在想做什么？');
                         await headerText.float();
                     }
                 }
@@ -48,7 +48,7 @@ $(async () => {
                             if (!headerChanged) {
                                 headerChanged = true;
                                 await headerText.sink();
-                                await headerText.text('让任务更清晰!');
+                                await headerText.text('让任务更清晰！');
                                 await headerText.float();
                             }
                             await hintsList.display(data.hints);
