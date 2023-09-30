@@ -1,6 +1,7 @@
 :root {
     --background-color: #1e1e1e;
     --font-color: #fff;
-
+    --font-family: 'Songti SC', 'SimSun', serif;
     --font-size: 1.5rem;
+    --header-size: calc(1.5rem + 2vw);
 }

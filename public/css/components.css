@@ -8,12 +8,25 @@ body {
     background-color: var(--background-color);
     color: var(--font-color);
     font-size: var(--font-size);
+    font-family: var(--font-family);
 }
 
 #dynamic-shape {
     position: absolute;
     left: 50%;
     transform: translate(-50%, -50%);
-
     background-color: var(--font-color);
+}
+
+#header {
+    position: absolute;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, -100%);
+    overflow: hidden;
+}
+
+#header-text {
+    transform: translateX(-50%);
+    font-size: var(--header-size);
 }

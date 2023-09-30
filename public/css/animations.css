@@ -5,3 +5,7 @@
 
     top: 50%;
 }
+
+#header-text {
+    transform: translateY(100%);
+}
