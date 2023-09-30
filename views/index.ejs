@@ -6,6 +6,10 @@ What do you want to do today?
 <button id="submit">Submit</button>
 
 <div>
+    <ul id="hint-list"></ul>
+</div>
+
+<div>
     <ul id="pre-list"></ul>
     <button id="confirm">Confirm</button>
 </div>
@@ -29,8 +33,44 @@ What do you want to do today?
 </style>
 
 <script>
+    let taskChangeTimeout;
+    $('#task').on('input', (e) => {
+        if ($('#task').val().trim().length < 7) {
+            return;
+        }
+
+        if (taskChangeTimeout) {
+            clearTimeout(taskChangeTimeout);
+        }
+        taskChangeTimeout = setTimeout(() => {
+            $.ajax({
+                url: '/api/fetchHints/',
+                type: 'POST',
+                data: {
+                    task: $('#task').val()
+                },
+                success: (data) => {
+                    console.log(data);
+                    if (!data.success) {
+                        alert('error');
+                        return;
+                    }
+                    $('#hint-list').empty();
+                    for (let i = 0; i < data.hints.length; i++) {
+                        $('#hint-list').append(`
+                        <li>
+                            ${data.hints[i]}
+                        </li>`);
+                    }
+                }
+            });
+            taskChangeTimeout = null;
+        }, 3000);
+    });
+
     let steps = [];
     $('#submit').click(() => {
+        clearTimeout(taskChangeTimeout);
         $.ajax({
             url: '/api/fetchSteps/',
             type: 'POST',
@@ -54,21 +94,22 @@ What do you want to do today?
                         <input type="number" value="${steps[i].time}" class="time" step-id="${i}"/>
                     </li>`);
                 }
-
-                $('.detail').change((e) => {
-                    let id = $(e.target).attr('step-id');
-                    let detail = $(e.target).val();
-                    steps[id].detail = detail;
-                    console.log(steps);
-                });
-                $('.time').change((e) => {
-                    let id = $(e.target).attr('step-id');
-                    let time = $(e.target).val();
-                    steps[id].time = time;
-                    console.log(steps);
-                });
             }
         });
+    });
+
+    $(document).on('input', '.detail', (e) => {
+        let id = $(e.target).attr('step-id');
+        let detail = $(e.target).val();
+        steps[id].detail = detail;
+        console.log(steps);
+    });
+
+    $(document).on('input', '.time', (e) => {
+        let id = $(e.target).attr('step-id');
+        let time = $(e.target).val();
+        steps[id].time = time;
+        console.log(steps);
     });
 
     $('#confirm').click(() => {
@@ -96,46 +137,46 @@ What do you want to do today?
                 location.reload();
             }
         });
+    });
 
-        let currTimer;
+    let currTimer;
 
-        $('.todo-item').click((e) => {
-            $('#timer').show();
+    $(document).on('click', '.todo-item', (e) => {
+        $('#timer').show();
 
-            let id = $(e.target).attr('step-id');
-            if (steps[id].finished) {
-                return;
-            }
+        let id = $(e.target).attr('step-id');
+        if (steps[id].finished) {
+            return;
+        }
 
-            if (currTimer) {
-                clearInterval(currTimer);
-                currTimer = null;
-            }
-            if (!steps[id].remainTime) {
-                steps[id].remainTime = steps[id].time * 60;
-            }
+        if (currTimer) {
+            clearInterval(currTimer);
+            currTimer = null;
+        }
+        if (!steps[id].remainTime) {
+            steps[id].remainTime = steps[id].time * 60;
+        }
 
+        $('#timer').text(
+            `${Math.floor(steps[id].remainTime / 60)}:${Math.floor((steps[id].remainTime % 60) / 10)}${
+                steps[id].remainTime % 10
+            }`
+        );
+        currTimer = setInterval(() => {
+            steps[id].remainTime--;
             $('#timer').text(
                 `${Math.floor(steps[id].remainTime / 60)}:${Math.floor((steps[id].remainTime % 60) / 10)}${
                     steps[id].remainTime % 10
                 }`
             );
-            currTimer = setInterval(() => {
-                steps[id].remainTime--;
-                $('#timer').text(
-                    `${Math.floor(steps[id].remainTime / 60)}:${Math.floor((steps[id].remainTime % 60) / 10)}${
-                        steps[id].remainTime % 10
-                    }`
-                );
 
-                if (steps[id].remainTime <= 0) {
-                    alert('Time is up!');
-                    clearInterval(currTimer);
-                    currTimer = null;
-                    $('#timer').hide();
-                }
-            }, 1000);
-        });
+            if (steps[id].remainTime <= 0) {
+                alert('Time is up!');
+                clearInterval(currTimer);
+                currTimer = null;
+                $('#timer').hide();
+            }
+        }, 1000);
     });
 </script>
 
