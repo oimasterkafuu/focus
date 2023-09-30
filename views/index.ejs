@@ -14,9 +14,7 @@ What do you want to do today?
     <ul id="todo-list"></ul>
 </div>
 
-<div id="timer">
-    xx:xx
-</div>
+<div id="timer">xx:xx</div>
 
 <style>
     input:not(.check) {
@@ -101,35 +99,43 @@ What do you want to do today?
 
         let currTimer;
 
-        $(".todo-item").click((e) => {
-            $("#timer").show();
+        $('.todo-item').click((e) => {
+            $('#timer').show();
 
             let id = $(e.target).attr('step-id');
-            if(steps[id].finished) {
+            if (steps[id].finished) {
                 return;
             }
 
-            if(currTimer) {
+            if (currTimer) {
                 clearInterval(currTimer);
                 currTimer = null;
             }
-            if(!steps[id].remainTime) {
+            if (!steps[id].remainTime) {
                 steps[id].remainTime = steps[id].time * 60;
             }
 
-            $("#timer").text(`${Math.floor(steps[id].remainTime / 60)}:${Math.floor(steps[id].remainTime % 60 / 10)}${steps[id].remainTime % 10}`);
+            $('#timer').text(
+                `${Math.floor(steps[id].remainTime / 60)}:${Math.floor((steps[id].remainTime % 60) / 10)}${
+                    steps[id].remainTime % 10
+                }`
+            );
             currTimer = setInterval(() => {
                 steps[id].remainTime--;
-                $("#timer").text(`${Math.floor(steps[id].remainTime / 60)}:${Math.floor(steps[id].remainTime % 60 / 10)}${steps[id].remainTime % 10}`);
+                $('#timer').text(
+                    `${Math.floor(steps[id].remainTime / 60)}:${Math.floor((steps[id].remainTime % 60) / 10)}${
+                        steps[id].remainTime % 10
+                    }`
+                );
 
-                if(steps[id].remainTime <= 0) {
+                if (steps[id].remainTime <= 0) {
                     alert('Time is up!');
                     clearInterval(currTimer);
                     currTimer = null;
-                    $("#timer").hide();
+                    $('#timer').hide();
                 }
             }, 1000);
-        })
+        });
     });
 </script>
 
