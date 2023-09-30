@@ -15,5 +15,7 @@ describe('POST /api/fetchSteps', function () {
         expect(response.status).to.be.equal(200);
         expect(response.body).to.be.an('object');
         expect(response.body.success).to.be.equal(true);
+        expect(response.body.steps).to.be.an('array');
+        expect(response.body.steps.length).to.be.greaterThan(0);
     });
 });
