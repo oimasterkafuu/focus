@@ -31,6 +31,7 @@ async function fetchChatGPT(content) {
     try {
         let result = await fetchWithCache(server, requestOptions);
         let message = result.choices[0].message.content;
+        console.log(content, message);
         let parsed = JSON.parse(message);
         return parsed;
     } catch (error) {
@@ -45,21 +46,28 @@ async function fetchSteps(content) {
     let result =
         await fetchChatGPT(`You are the assistant of the FOCUS app. The user will provide you his/her task and deadline. You should answer in a json array where each item is in the format {"time": "Time required in minutes", "detail": "Single step task required to complete"}.
 Use the user's language to provide the details.
+NEVER RETURN ANYTHING ELSE EXCEPT YOUR JSON.
 For example, if the user says {{write a 10-page report about climate change}}
-You should answer [{"time":"90","detail":"Research climate change facts and sources"},{"time":"30","detail":"Outline report structure and main points"},{"time":"120","detail":"Write report introduction and background"},{"time":"180","detail":"Write report analysis and findings"},{"time":"90","detail":"Write report conclusion and recommendations"},{"time":"30","detail":"Proofread and format report"}] (a valid JSON of several steps, not containing any other character)
-Now user says {{${content}}}`);
+You should answer [{"time":"90","detail":"Research climate change facts and sources"},{"time":"30","detail":"Outline report structure and main points"},{"time":"120","detail":"Write report introduction and background"},{"time":"180","detail":"Write report analysis and findings"},{"time":"90","detail":"Write report conclusion and recommendations"},{"time":"30","detail":"Proofread and format report"}]
+Now the user says {{${content}}}`);
     return result;
 }
 
-async function fetchHints(content) {
+async function fetchHints(content, oldHints) {
     if (!content) return null;
 
     let result =
-        await fetchChatGPT(`You are the assistant of the FOCUS app. The user will provide you a vague task. You should answer in a json array where each item is a question to ask the user for more detail. The array should have exactly 5 items.
+        await fetchChatGPT(`You are the assistant of the FOCUS app. The user will provide you a vague task. You should answer in a json array where each item is a question to ask the user for more detail. Your questions should not ask for the information the user already provided. The array should have exactly 3 items.
 Use the user's language to ask the questions.
-For example, if the user says {{do my homework}}
-You should answer ["What subject is your homework?", "How many assignments do you have?", "What are the requirements for each assignment?", "How much time do you have to finish them?", "Do you need any help or resources?"] (a valid JSON of several questions, not containing any other character)
-Now user says {{${content}}}`);
+${
+    oldHints
+        ? `You have already provided hints. The previous hints are: ${oldHints}. Only change them if the user has answered them.`
+        : ''
+}
+NEVER RETURN ANYTHING ELSE EXCEPT YOUR JSON.
+For example, if the user says {{do my homework}} with no previous hints
+You should answer ["What subject is your homework?", "How many assignments do you have?", "How much time do you have to finish them?"]
+Now the user says {{${content}}}`);
     return result;
 }
 

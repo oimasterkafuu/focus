@@ -11,7 +11,7 @@ router.post('/fetchSteps/', async (req, res) => {
     res.send({ success: false });
 });
 router.post('/fetchHints/', async (req, res) => {
-    let result = await fetchHints(req.body.task);
+    let result = await fetchHints(req.body.task, req.body.oldHints);
     if (result) {
         res.send({ success: true, hints: result });
         return;

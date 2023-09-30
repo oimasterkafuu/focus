@@ -41,7 +41,8 @@ $(async () => {
                     type: 'POST',
                     url: '/api/fetchHints/',
                     data: {
-                        task: $('#task-input').val()
+                        task: $('#task-input').val(),
+                        oldHints: hintsList.existElements
                     },
                     success: async (data) => {
                         if (data.success) {

@@ -31,6 +31,6 @@ describe('POST /api/fetchHints', function () {
         expect(response.body).to.be.an('object');
         expect(response.body.success).to.be.equal(true);
         expect(response.body.hints).to.be.an('array');
-        expect(response.body.hints.length).to.be.at.least(5);
+        expect(response.body.hints.length).to.be.equal(3);
     });
 });
