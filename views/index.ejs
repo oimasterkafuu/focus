@@ -7,16 +7,26 @@ What do you want to do today?
 
 <div>
     <ul id="pre-list"></ul>
-    <button id="confirm" style="display: none">Confirm</button>
+    <button id="confirm">Confirm</button>
 </div>
 
 <div>
     <ul id="todo-list"></ul>
 </div>
 
+<div id="timer">
+    xx:xx
+</div>
+
 <style>
     input:not(.check) {
         width: 200px;
+    }
+    #confirm {
+        display: none;
+    }
+    #timer {
+        display: none;
     }
 </style>
 
@@ -71,9 +81,10 @@ What do you want to do today?
             $('#todo-list').append(`
             <li>
                 <input type="checkbox" class="check" step-id="${i}"/>
-                ${steps[i].detail}
+                <span class="todo-item" step-id="${i}">${steps[i].detail}
                 -
                 ${steps[i].time} minutes
+                </span>
             </li>`);
         }
 
@@ -87,6 +98,38 @@ What do you want to do today?
                 location.reload();
             }
         });
+
+        let currTimer;
+
+        $(".todo-item").click((e) => {
+            $("#timer").show();
+
+            let id = $(e.target).attr('step-id');
+            if(steps[id].finished) {
+                return;
+            }
+
+            if(currTimer) {
+                clearInterval(currTimer);
+                currTimer = null;
+            }
+            if(!steps[id].remainTime) {
+                steps[id].remainTime = steps[id].time * 60;
+            }
+
+            $("#timer").text(`${Math.floor(steps[id].remainTime / 60)}:${Math.floor(steps[id].remainTime % 60 / 10)}${steps[id].remainTime % 10}`);
+            currTimer = setInterval(() => {
+                steps[id].remainTime--;
+                $("#timer").text(`${Math.floor(steps[id].remainTime / 60)}:${Math.floor(steps[id].remainTime % 60 / 10)}${steps[id].remainTime % 10}`);
+
+                if(steps[id].remainTime <= 0) {
+                    alert('Time is up!');
+                    clearInterval(currTimer);
+                    currTimer = null;
+                    $("#timer").hide();
+                }
+            }, 1000);
+        })
     });
 </script>
 
