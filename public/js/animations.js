@@ -1,3 +1,9 @@
+async function sleep(duration) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, duration);
+    });
+}
+
 const dynamicShape = {
     async dot() {
         await $('#dynamic-shape').animate(
