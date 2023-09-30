@@ -14,12 +14,23 @@ $(async () => {
     });
 
     (() => {
-        let taskChangedTimeout;
-        $('#task-input').on('input', () => {
+        let taskChangedTimeout,
+            headerChanged = false;
+        $('#task-input').on('input', async () => {
             if (taskChangedTimeout) {
                 clearTimeout(taskChangedTimeout);
             }
+
             if ($('#task-input').val().trim().length < 7) {
+                if ($('#task-input').val().trim().length === 0) {
+                    await hintsList.display([]);
+                    if (headerChanged) {
+                        headerChanged = false;
+                        await headerText.sink();
+                        await headerText.text('现在想做什么?');
+                        await headerText.float();
+                    }
+                }
                 return;
             }
 
@@ -32,9 +43,15 @@ $(async () => {
                     data: {
                         task: $('#task-input').val()
                     },
-                    success: (data) => {
+                    success: async (data) => {
                         if (data.success) {
-                            hintsList.display(data.hints);
+                            if (!headerChanged) {
+                                headerChanged = true;
+                                await headerText.sink();
+                                await headerText.text('让任务更清晰!');
+                                await headerText.float();
+                            }
+                            await hintsList.display(data.hints);
                         }
                     }
                 });

@@ -118,12 +118,15 @@ const hintsList = {
     existElements: [],
     async display(hints) {
         if (this.existElements.length !== hints.length) {
-            await $('#hints-list').empty().promise();
             await $('#hints-list')
-                .css({
-                    opacity: 0
-                })
+                .animate(
+                    {
+                        opacity: 0
+                    },
+                    350
+                )
                 .promise();
+            await $('#hints-list').empty().promise();
             for (let i = 0; i < hints.length; i++) {
                 await $('#hints-list').append(`<li class="hint" hint-id="${i}">${hints[i]}</li>`).promise();
             }
