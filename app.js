@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 const { apiRouter } = require('./routers/api');
 
 const app = express();
@@ -15,5 +16,6 @@ app.get('/alpha-version', (req, res) => {
 });
 
 app.use('/api/', apiRouter);
+app.use(express.static(path.join(__dirname, 'public')));
 
 module.exports = app;
