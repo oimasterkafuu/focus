@@ -10,6 +10,9 @@ app.set('view engine', 'ejs');
 app.get('/', (req, res) => {
     res.render('index');
 });
+app.get('/alpha-version', (req, res) => {
+    res.render('alpha');
+});
 
 app.use('/api/', apiRouter);
 
