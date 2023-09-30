@@ -61,7 +61,7 @@ async function fetchHints(content, oldHints) {
 Use the user's language to ask the questions.
 ${
     oldHints
-        ? `You have already provided hints. The previous hints are: ${oldHints}. Only change them if the user has answered them.`
+        ? `You have already provided hints. The previous hints are: ${oldHints}. Only change them if the user has answered them. Otherwise, do not change any character in it.`
         : ''
 }
 NEVER RETURN ANYTHING ELSE EXCEPT YOUR JSON.

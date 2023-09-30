@@ -142,9 +142,10 @@ const hintsList = {
                 .promise();
             this.existElements = hints;
         } else {
+            let oldHints = this.existElements;
             this.existElements = matcher(this.existElements, hints);
             for (let i = 0; i < this.existElements.length; i++) {
-                let oldContent = $('#hints-list li[hint-id="' + i + '"]').text();
+                let oldContent = oldHints[i];
                 let newContent = this.existElements[i];
                 if (oldContent !== newContent) {
                     await $('#hints-list li[hint-id="' + i + '"]')
