@@ -197,8 +197,8 @@ const todoTable = {
         await $('#todo-table').animate({ opacity: 1 }, 700).promise();
     },
     async display(todos, changeFn) {
-        await $('.detail').off('input');
-        await $('.time').off('input');
+        await $('.detail').off('change');
+        await $('.time').off('change');
         await $('.delete').off('click');
         await $('#addButton').off('click');
         await $('#todo-list').empty();
@@ -221,7 +221,7 @@ const todoTable = {
                 <td><button id="addButton">添加</button></td>
             </tr>`
         );
-        $('.detail').on('input', (e) => {
+        $('.detail').on('change', (e) => {
             let id = $(e.target).attr('todo-id');
             if ($(e.target).val() === '') {
                 $(e.target).val(this.existTodos[id].detail);
@@ -230,9 +230,9 @@ const todoTable = {
             }
             changeFn(this.existTodos);
         });
-        $('.time').on('input', (e) => {
+        $('.time').on('change', (e) => {
             let id = $(e.target).attr('todo-id');
-            if ($(e.target).val() === '') {
+            if ($(e.target).val() <= 0) {
                 $(e.target).val(this.existTodos[id].time);
             } else {
                 this.existTodos[id].time = $(e.target).val();
@@ -351,8 +351,8 @@ const todoTable = {
         });
     },
     async hide() {
-        await $('.detail').off('input');
-        await $('.time').off('input');
+        await $('.detail').off('change');
+        await $('.time').off('change');
         await $('.delete').off('click');
         await $('#addButton').off('click');
         await $('#todo-list').empty();
