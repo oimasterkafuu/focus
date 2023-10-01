@@ -81,7 +81,7 @@ $(async () => {
     await runAll(async () => {
         await hintsList.display([]);
     }, headerText.sink);
-    await headerText.text('请稍等……');
+    await headerText.text('请稍候……');
     await waitCursor();
     await runAll(taskInput.lock, headerText.float);
 
@@ -119,6 +119,8 @@ $(async () => {
     })();
 
     await waitUserEnter();
+    $('input').blur();
+
     await runAll(headerText.sink, todoTable.hide);
     await headerText.text('专注马上开始');
     await focusTable.display(steps);
@@ -132,22 +134,56 @@ $(async () => {
         await sleep(1000);
         await defaultCursor();
         await taskInput.update('全屏模式已打开');
-        await taskInput.update('按下 Enter 开始专注');
+        await sleep(1000);
     });
 
     for (let i = 0; i < steps.length; i++) {
+        await taskInput.update('按下 Enter 开始专注');
         await waitUserEnter();
         await runAll(headerText.sink, focusTable.hide);
         await headerText.text(steps[i].detail);
-        await headerText.float();
+        await focusTimer.set(steps[i].time * 60);
+        await runAll(
+            headerText.float,
+            async () => {
+                await taskInput.update('按下 Enter 键完成，按下空格键暂停');
+            },
+            async () => {
+                await focusTimer.show();
+            }
+        );
+        let currTime = 0;
+        let timerMain = async () => {
+            currTime++;
+            await focusTimer.set(steps[i].time * 60 - currTime);
+        };
+        let timer = setInterval(timerMain, 1000);
+        let toggleRunning = async () => {
+            if (timer) {
+                clearInterval(timer);
+                timer = null;
+                await taskInput.update('按下 Enter 键完成，按下空格键继续');
+            } else {
+                timer = setInterval(timerMain, 100);
+                await taskInput.update('按下 Enter 键完成，按下空格键暂停');
+            }
+        };
+        addEventListener('keydown', (e) => {
+            if (e.key === ' ') {
+                toggleRunning();
+            }
+        });
         await waitUserEnter();
+        if (timer) clearInterval(timer);
+        removeEventListener('keydown', toggleRunning);
+        await focusTimer.hide();
         await headerText.sink();
         if (i + 1 < steps.length) {
             await headerText.text('准备下一个步骤');
         } else {
             await headerText.text('查看专注报告');
         }
-        await focusTable.finish(i, steps[i].time);
+        await focusTable.finish(i, Math.ceil(currTime / 60));
         await runAll(headerText.float, focusTable.show);
     }
 
@@ -170,8 +206,8 @@ $(async () => {
 
     await sleep(1500);
     await headerText.sink();
-    await dynamicShape.center();
     await dynamicShape.dot();
+    await dynamicShape.center();
     await dynamicShape.disappear();
 
     await pointCursor();

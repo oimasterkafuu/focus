@@ -243,7 +243,7 @@ const todoTable = {
     },
     async display(todos, changeFn) {
         await $('.detail').off('change');
-        await $('.time').off('change');
+        await $('.time').off('input');
         await $('.delete').off('click');
         await $('#addButton').off('click');
         await $('#todo-list').empty();
@@ -275,7 +275,7 @@ const todoTable = {
             }
             changeFn(todoTable.existTodos);
         });
-        $('.time').on('change', (e) => {
+        $('.time').on('input', (e) => {
             let id = $(e.target).attr('todo-id');
             if ($(e.target).val() <= 0) {
                 $(e.target).val(todoTable.existTodos[id].time);
@@ -397,7 +397,7 @@ const todoTable = {
     },
     async hide() {
         await $('.detail').off('change');
-        await $('.time').off('change');
+        await $('.time').off('input');
         await $('.delete').off('click');
         await $('#addButton').off('click');
         await $('#todo-table').animate({ opacity: 0 }, 700).promise();
@@ -432,5 +432,49 @@ const focusTable = {
     async hide() {
         await $('#focus-table').animate({ opacity: 0 }, 700).promise();
         await $('#focus-table').css('display', 'none').promise();
+    }
+};
+
+const focusTimer = {
+    async show() {
+        await $('#focus-timer').css('display', 'block').promise();
+        await $('#focus-timer').animate({ opacity: 1 }, 700).promise();
+
+        await $('#timer-negative')
+            .css({
+                display: 'none',
+                opacity: 0
+            })
+            .promise();
+    },
+    async set(sec) {
+        if (sec === -1) {
+            await $('#timer-negative').css('display', 'inline-block').promise();
+            await $('#timer-negative').animate({ opacity: 1 }, 700).promise();
+        }
+        if (sec < 0) {
+            sec = -sec;
+        }
+
+        let hours = Math.floor(sec / 3600);
+        let minutes = Math.floor((sec - hours * 3600) / 60);
+        let seconds = sec - hours * 3600 - minutes * 60;
+
+        let first, second;
+        if (hours) {
+            first = hours;
+            second = minutes;
+        } else {
+            first = minutes;
+            second = seconds;
+        }
+
+        second = second < 10 ? '0' + second : second;
+        await $('#timer-first').text(first);
+        await $('#timer-second').text(second);
+    },
+    async hide() {
+        await $('#focus-timer').animate({ opacity: 0 }, 700).promise();
+        await $('#focus-timer').css('display', 'none').promise();
     }
 };

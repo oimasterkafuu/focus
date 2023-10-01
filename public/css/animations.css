@@ -33,3 +33,14 @@
     display: none;
     opacity: 0;
 }
+
+#focus-timer {
+    display: none;
+    opacity: 0;
+}
+
+#timer-negative {
+    display: none;
+    opacity: 0;
+    color: red;
+}

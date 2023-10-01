@@ -5,6 +5,7 @@
     --font-family: 'Songti SC', 'SimSun', serif;
     --font-size: 1.5rem;
     --header-size: calc(1.5rem + 2vw);
+    --timer-size: 20vw;
     --font-weight: 200;
     --header-font-weight: 700;
 }

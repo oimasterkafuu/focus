@@ -149,3 +149,13 @@ body {
 #todo-list button:hover {
     color: var(--input-background-color);
 }
+
+#focus-timer {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: var(--timer-size);
+    font-weight: var(--header-font-weight);
+    white-space: nowrap;
+}
