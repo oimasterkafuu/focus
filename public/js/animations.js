@@ -51,7 +51,8 @@ const headerText = {
     async float() {
         await $('#header-text')
             .css({
-                transform: 'translateY(100%)'
+                transform: 'translateY(100%)',
+                opacity: 0
             })
             .promise();
         await $('#header-text')
@@ -71,6 +72,7 @@ const headerText = {
                     duration: 700,
                     step: function (value) {
                         $(this).css('transform', 'translateY(' + (1 - value) * 100 + '%)');
+                        $(this).css('opacity', value);
                     }
                 }
             )
@@ -94,6 +96,7 @@ const headerText = {
                     duration: 700,
                     step: function (value) {
                         $(this).css('transform', 'translateY(' + value * 100 + '%)');
+                        $(this).css('opacity', 1 - value);
                     }
                 }
             )
