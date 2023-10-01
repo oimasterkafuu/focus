@@ -106,6 +106,7 @@ const headerText = {
 
 const taskInput = {
     async show() {
+        await $('#task-input').css('display', 'block').promise();
         await $('#task-input')
             .animate(
                 {
@@ -116,6 +117,18 @@ const taskInput = {
             .promise();
         await sleep(400);
         await $('#task-input').focus().promise();
+    },
+    async lock() {
+        await $('#task-input').prop('readonly', true).promise();
+        await sleep(400);
+        await $('#task-input')
+            .animate(
+                {
+                    padding: 0
+                },
+                700
+            )
+            .promise();
     }
 };
 
@@ -135,6 +148,7 @@ const hintsList = {
             for (let i = 0; i < hints.length; i++) {
                 await $('#hints-list').append(`<li class="hint" hint-id="${i}">${hints[i]}</li>`).promise();
             }
+            await $('#hints-list').css('display', 'block').promise();
             await $('#hints-list')
                 .animate(
                     {
@@ -173,5 +187,176 @@ const hintsList = {
                 }
             }
         }
+    }
+};
+
+const todoTable = {
+    existTodos: [],
+    async show() {
+        await $('#todo-table').css('display', 'block').promise();
+        await $('#todo-table').animate({ opacity: 1 }, 700).promise();
+    },
+    async display(todos, changeFn) {
+        await $('.detail').off('input');
+        await $('.time').off('input');
+        await $('.delete').off('click');
+        await $('#addButton').off('click');
+        await $('#todo-list').empty();
+        this.existTodos = todos;
+        for (let i = 0; i < this.existTodos.length; i++) {
+            await $('#todo-list').append(
+                `<tr todo-id="${i}">
+                    <th>${i + 1}</th>
+                    <td><input type="text" value="${todos[i].detail}" class="detail" todo-id="${i}"></td>
+                    <td><input type="number" value="${todos[i].time}" class="time" todo-id="${i}"></td>
+                    <td><button class="delete" todo-id="${i}">删除</button></td>
+                </tr>`
+            );
+        }
+        await $('#todo-list').append(
+            `<tr todo-id="${todos.length}">
+                <th></th>
+                <td><input type="text" id="addDetail" placeholder="按下 Enter 进入下一步"></td>
+                <td><input type="number" id="addTime" placeholder="25"></td>
+                <td><button id="addButton">添加</button></td>
+            </tr>`
+        );
+        $('.detail').on('input', (e) => {
+            let id = $(e.target).attr('todo-id');
+            if ($(e.target).val() === '') {
+                $(e.target).val(this.existTodos[id].detail);
+            } else {
+                this.existTodos[id].detail = $(e.target).val();
+            }
+            changeFn(this.existTodos);
+        });
+        $('.time').on('input', (e) => {
+            let id = $(e.target).attr('todo-id');
+            if ($(e.target).val() === '') {
+                $(e.target).val(this.existTodos[id].time);
+            } else {
+                this.existTodos[id].time = $(e.target).val();
+            }
+            changeFn(this.existTodos);
+        });
+        $('.delete').on('click', async (e) => {
+            if (this.existTodos.length === 1) {
+                return;
+            }
+
+            let id = $(e.target).attr('todo-id');
+            id = parseInt(id);
+
+            let height = $('#todo-list tr[todo-id="' + id + '"]').height();
+            let floatPromises = [
+                async () => {
+                    await $('#todo-list tr[todo-id="' + id + '"]')
+                        .animate(
+                            {
+                                opacity: 0
+                            },
+                            350
+                        )
+                        .promise();
+                }
+            ];
+            for (let i = id + 1; i <= this.existTodos.length; i++) {
+                await $('#todo-list tr[todo-id="' + i + '"]')
+                    .animate(
+                        {
+                            dummy: 0
+                        },
+                        0
+                    )
+                    .promise();
+                floatPromises.push(async () => {
+                    if ($('#todo-list tr[todo-id="' + i + '"] th').text())
+                        await $('#todo-list tr[todo-id="' + i + '"] th')
+                            .text(i)
+                            .promise();
+                    await $('#todo-list tr[todo-id="' + i + '"]')
+                        .animate(
+                            {
+                                dummy: 1
+                            },
+                            {
+                                duration: 700,
+                                step: function (value) {
+                                    $(this).css('transform', 'translateY(-' + value * height + 'px)');
+                                }
+                            }
+                        )
+                        .promise();
+                });
+            }
+
+            await runAll(...floatPromises);
+
+            this.existTodos.splice(id, 1);
+            changeFn(this.existTodos);
+            this.display(this.existTodos, changeFn);
+        });
+        $('#addButton').on('click', async () => {
+            if (!$('#addDetail').val().trim() || !$('#addTime').val() || $('#addTime').val() <= 0) {
+                return;
+            }
+
+            this.existTodos.push({
+                detail: $('#addDetail').val(),
+                time: $('#addTime').val()
+            });
+
+            let height = $('#todo-list tr[todo-id="' + (this.existTodos.length - 1) + '"]').height();
+            let newItem = $(`<tr>
+                <th></th>
+                <td><input type="text" placeholder="按下 Enter 进入下一步"></td>
+                <td><input type="number" placeholder="25"></td>
+                <td><button>添加</button></td>
+            </tr>`);
+            newItem.attr('todo-id', this.existTodos.length);
+            newItem.css('opacity', 0);
+            newItem.css('transform', 'translateY(-' + height + 'px)');
+            await $('#todo-list').append(newItem).promise();
+            await runAll(
+                async () => {
+                    await newItem
+                        .animate(
+                            {
+                                dummy: 1
+                            },
+                            {
+                                duration: 700,
+                                step: function (value) {
+                                    $(this).css('opacity', value);
+                                    $(this).css('transform', 'translateY(-' + (1 - value) * height + 'px)');
+                                }
+                            }
+                        )
+                        .promise();
+                },
+                async () => {
+                    await $('#todo-list tr[todo-id="' + (this.existTodos.length - 1) + '"] th')
+                        .text(this.existTodos.length)
+                        .promise();
+                },
+                async () => {
+                    await $('#todo-list tr[todo-id="' + (this.existTodos.length - 1) + '"] button')
+                        .text('删除')
+                        .promise();
+                }
+            );
+
+            changeFn(this.existTodos);
+            this.display(this.existTodos, changeFn);
+        });
+    },
+    async hide() {
+        await $('.detail').off('input');
+        await $('.time').off('input');
+        await $('.delete').off('click');
+        await $('#addButton').off('click');
+        await $('#todo-list').empty();
+        await $('#todo-table').animate({ opacity: 0 }, 700).promise();
+        await $('#todo-table').css('display', 'none').promise();
     }
 };

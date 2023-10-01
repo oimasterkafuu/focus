@@ -9,6 +9,7 @@ body {
     color: var(--font-color);
     font-size: var(--font-size);
     font-family: var(--font-family);
+    font-weight: var(--font-weight);
 }
 
 #dynamic-shape {
@@ -29,6 +30,7 @@ body {
 #header-text {
     transform: translateX(-50%);
     font-size: var(--header-size);
+    font-weight: var(--header-font-weight);
 }
 
 #task-input {
@@ -41,14 +43,13 @@ body {
     font-size: var(--font-size);
     font-family: var(--font-family);
     text-align: center;
+    font-weight: var(--font-weight);
 
-    background-color: var(--input-background-color);
     color: var(--font-color);
 
     border: none;
     border-radius: calc(var(--font-size) * 3 / 2);
     outline: none;
-    padding: var(--font-size);
 }
 
 #hints-list {
@@ -57,4 +58,78 @@ body {
     top: 50%;
     transform: translateX(-50%);
     width: 40vw;
+}
+
+#todo-table {
+    position: absolute;
+    left: 50%;
+    top: 30%;
+    transform: translateX(-50%);
+}
+
+#todo-table tfoot {
+    margin-top: 30px;
+}
+
+#todo-table th,
+#todo-table td {
+    padding: 3px;
+    min-width: 5vw;
+    text-align: center;
+}
+
+#todo-table td,
+#todo-table th.hasLeftBorder {
+    border-left: 1px solid var(--font-color);
+}
+
+#todo-table th {
+    font-weight: var(--header-font-weight);
+}
+
+#todo-list input {
+    font-size: var(--font-size);
+    font-family: var(--font-family);
+    text-align: center;
+    font-weight: var(--font-weight);
+
+    background-color: var(--background-color);
+    color: var(--font-color);
+
+    border: none;
+    outline: none;
+
+    width: 50vw;
+}
+
+#todo-list input[type='number'] {
+    width: 5vw;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+#todo-list input[type='number']::-webkit-outer-spin-button,
+#todo-list input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+#todo-list button {
+    width: 7vw;
+
+    cursor: pointer;
+    text-align: center;
+
+    font-weight: var(--font-weight);
+    font-size: var(--font-size);
+    font-family: var(--font-family);
+    text-align: center;
+
+    background-color: var(--background-color);
+    color: var(--font-color);
+    transition: color 350ms;
+
+    border: none;
+    outline: none;
+}
+#todo-list button:hover {
+    color: var(--input-background-color);
 }

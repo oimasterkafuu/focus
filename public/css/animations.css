@@ -12,9 +12,23 @@
 }
 
 #task-input {
+    display: none;
     opacity: 0;
+    background-color: var(--input-background-color);
+    transition: background-color 700ms;
+    padding: var(--font-size);
+}
+
+#task-input:read-only {
+    background-color: var(--background-color);
 }
 
 #hints-list {
+    display: none;
+    opacity: 0;
+}
+
+#todo-table {
+    display: none;
     opacity: 0;
 }
