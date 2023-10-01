@@ -33,3 +33,14 @@ function matcher(a, b) {
 
     return result;
 }
+
+async function waitUserEnter() {
+    await new Promise((resolve) => {
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                document.removeEventListener('keydown', waitUserEnter);
+                resolve();
+            }
+        });
+    });
+}

@@ -59,6 +59,6 @@ $(async () => {
             }, 2000);
         });
     })();
-
+    await waitUserEnter();
     console.log('done');
 });
