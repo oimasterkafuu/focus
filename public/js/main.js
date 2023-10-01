@@ -164,7 +164,7 @@ $(async () => {
                 timer = null;
                 await taskInput.update('按下 Enter 键完成，按下空格键继续');
             } else {
-                timer = setInterval(timerMain, 100);
+                timer = setInterval(timerMain, 1000);
                 await taskInput.update('按下 Enter 键完成，按下空格键暂停');
             }
         };
