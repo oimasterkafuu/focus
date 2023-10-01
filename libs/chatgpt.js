@@ -31,7 +31,6 @@ async function fetchChatGPT(content) {
     try {
         let result = await fetchWithCache(server, requestOptions);
         let message = result.choices[0].message.content;
-        console.log(content, message);
         let parsed = JSON.parse(message);
         return parsed;
     } catch (error) {
