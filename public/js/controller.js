@@ -44,3 +44,33 @@ async function waitUserEnter() {
         });
     });
 }
+
+function requestFullscreen() {
+    let element = document.documentElement;
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if (element.mozRequestFullScreen) {
+        element.mozRequestFullScreen();
+    } else if (element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen();
+    }
+}
+function exitFullscreen() {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    }
+}
+
+async function waitCursor() {
+    await $(document.body).css('cursor', 'wait').promise();
+}
+async function pointCursor() {
+    await $(document.body).css('cursor', 'pointer').promise();
+}
+async function defaultCursor() {
+    await $(document.body).css('cursor', 'default').promise();
+}

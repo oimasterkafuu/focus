@@ -23,6 +23,17 @@ const dynamicShape = {
             )
             .promise();
     },
+    async disappear() {
+        await $('#dynamic-shape')
+            .animate(
+                {
+                    width: '0',
+                    height: '0'
+                },
+                700
+            )
+            .promise();
+    },
     async header() {
         await $('#dynamic-shape')
             .animate(
@@ -45,6 +56,14 @@ const dynamicShape = {
     }
 };
 const headerText = {
+    async calcSize() {
+        let maxWidth = $('#dynamic-shape').width();
+        await $('#header-text').css('font-size', 'var(--header-size)');
+        let headerSize = $('#header-text').css('font-size');
+        let headerWidth = $('#header-text').width();
+        let newSize = Math.min(maxWidth / headerWidth, 1) * parseFloat(headerSize);
+        $('#header-text').css('font-size', newSize);
+    },
     async text(s) {
         await $('#header-text').text(s).promise();
     },
@@ -55,6 +74,7 @@ const headerText = {
                 opacity: 0
             })
             .promise();
+        await headerText.calcSize();
         await $('#header-text')
             .animate(
                 {
@@ -77,6 +97,7 @@ const headerText = {
                 }
             )
             .promise();
+        addEventListener('resize', headerText.calcSize);
     },
     async sink() {
         await $('#header-text')
@@ -101,6 +122,7 @@ const headerText = {
                 }
             )
             .promise();
+        removeEventListener('resize', headerText.calcSize);
     }
 };
 
@@ -129,13 +151,36 @@ const taskInput = {
                 700
             )
             .promise();
+    },
+    async update(s) {
+        await $('#task-input')
+            .animate(
+                {
+                    opacity: 0
+                },
+                350
+            )
+            .promise();
+        await $('#task-input').val(s).promise();
+        await $('#task-input')
+            .animate(
+                {
+                    opacity: 1
+                },
+                350
+            )
+            .promise();
+    },
+    async hide() {
+        await $('#task-input').animate({ opacity: 0 }, 700).promise();
+        await $('#task-input').css('display', 'none').promise();
     }
 };
 
 const hintsList = {
     existElements: [],
     async display(hints) {
-        if (this.existElements.length !== hints.length) {
+        if (hintsList.existElements.length !== hints.length) {
             await $('#hints-list')
                 .animate(
                     {
@@ -157,13 +202,13 @@ const hintsList = {
                     700
                 )
                 .promise();
-            this.existElements = hints;
+            hintsList.existElements = hints;
         } else {
-            let oldHints = this.existElements;
-            this.existElements = matcher(this.existElements, hints);
-            for (let i = 0; i < this.existElements.length; i++) {
+            let oldHints = hintsList.existElements;
+            hintsList.existElements = matcher(hintsList.existElements, hints);
+            for (let i = 0; i < hintsList.existElements.length; i++) {
                 let oldContent = oldHints[i];
-                let newContent = this.existElements[i];
+                let newContent = hintsList.existElements[i];
                 if (oldContent !== newContent) {
                     await $('#hints-list li[hint-id="' + i + '"]')
                         .animate(
@@ -202,8 +247,8 @@ const todoTable = {
         await $('.delete').off('click');
         await $('#addButton').off('click');
         await $('#todo-list').empty();
-        this.existTodos = todos;
-        for (let i = 0; i < this.existTodos.length; i++) {
+        todoTable.existTodos = todos;
+        for (let i = 0; i < todoTable.existTodos.length; i++) {
             await $('#todo-list').append(
                 `<tr todo-id="${i}">
                     <th>${i + 1}</th>
@@ -216,7 +261,7 @@ const todoTable = {
         await $('#todo-list').append(
             `<tr todo-id="${todos.length}">
                 <th></th>
-                <td><input type="text" id="addDetail" placeholder="按下 Enter 进入下一步"></td>
+                <td><input type="text" id="addDetail" placeholder="创建新步骤"></td>
                 <td><input type="number" id="addTime" placeholder="25"></td>
                 <td><button id="addButton">添加</button></td>
             </tr>`
@@ -224,23 +269,23 @@ const todoTable = {
         $('.detail').on('change', (e) => {
             let id = $(e.target).attr('todo-id');
             if ($(e.target).val() === '') {
-                $(e.target).val(this.existTodos[id].detail);
+                $(e.target).val(todoTable.existTodos[id].detail);
             } else {
-                this.existTodos[id].detail = $(e.target).val();
+                todoTable.existTodos[id].detail = $(e.target).val();
             }
-            changeFn(this.existTodos);
+            changeFn(todoTable.existTodos);
         });
         $('.time').on('change', (e) => {
             let id = $(e.target).attr('todo-id');
             if ($(e.target).val() <= 0) {
-                $(e.target).val(this.existTodos[id].time);
+                $(e.target).val(todoTable.existTodos[id].time);
             } else {
-                this.existTodos[id].time = $(e.target).val();
+                todoTable.existTodos[id].time = $(e.target).val();
             }
-            changeFn(this.existTodos);
+            changeFn(todoTable.existTodos);
         });
         $('.delete').on('click', async (e) => {
-            if (this.existTodos.length === 1) {
+            if (todoTable.existTodos.length === 1) {
                 return;
             }
 
@@ -260,7 +305,7 @@ const todoTable = {
                         .promise();
                 }
             ];
-            for (let i = id + 1; i <= this.existTodos.length; i++) {
+            for (let i = id + 1; i <= todoTable.existTodos.length; i++) {
                 await $('#todo-list tr[todo-id="' + i + '"]')
                     .animate(
                         {
@@ -292,30 +337,30 @@ const todoTable = {
 
             await runAll(...floatPromises);
 
-            this.existTodos.splice(id, 1);
-            changeFn(this.existTodos);
-            this.display(this.existTodos, changeFn);
+            todoTable.existTodos.splice(id, 1);
+            changeFn(todoTable.existTodos);
+            todoTable.display(todoTable.existTodos, changeFn);
         });
         $('#addButton').on('click', async () => {
             if (!$('#addDetail').val().trim() || !$('#addTime').val() || $('#addTime').val() <= 0) {
                 return;
             }
 
-            this.existTodos.push({
+            todoTable.existTodos.push({
                 detail: $('#addDetail').val(),
                 time: $('#addTime').val()
             });
 
-            let height = $('#todo-list tr[todo-id="' + (this.existTodos.length - 1) + '"]').height();
+            let height = $('#todo-list tr[todo-id="' + (todoTable.existTodos.length - 1) + '"]').height();
             let newItem = $(`<tr>
                 <th></th>
-                <td><input type="text" placeholder="按下 Enter 进入下一步"></td>
+                <td><input type="text" placeholder="创建新步骤"></td>
                 <td><input type="number" placeholder="25"></td>
                 <td><button>添加</button></td>
             </tr>`);
-            newItem.attr('todo-id', this.existTodos.length);
-            newItem.css('opacity', 0);
-            newItem.css('transform', 'translateY(-' + height + 'px)');
+            await newItem.attr('todo-id', todoTable.existTodos.length).promise();
+            await newItem.css('opacity', 0).promise();
+            await newItem.css('transform', 'translateY(-' + height + 'px)').promise();
             await $('#todo-list').append(newItem).promise();
             await runAll(
                 async () => {
@@ -335,19 +380,19 @@ const todoTable = {
                         .promise();
                 },
                 async () => {
-                    await $('#todo-list tr[todo-id="' + (this.existTodos.length - 1) + '"] th')
-                        .text(this.existTodos.length)
+                    await $('#todo-list tr[todo-id="' + (todoTable.existTodos.length - 1) + '"] th')
+                        .text(todoTable.existTodos.length)
                         .promise();
                 },
                 async () => {
-                    await $('#todo-list tr[todo-id="' + (this.existTodos.length - 1) + '"] button')
+                    await $('#todo-list tr[todo-id="' + (todoTable.existTodos.length - 1) + '"] button')
                         .text('删除')
                         .promise();
                 }
             );
 
-            changeFn(this.existTodos);
-            this.display(this.existTodos, changeFn);
+            changeFn(todoTable.existTodos);
+            todoTable.display(todoTable.existTodos, changeFn);
         });
     },
     async hide() {
@@ -355,8 +400,37 @@ const todoTable = {
         await $('.time').off('change');
         await $('.delete').off('click');
         await $('#addButton').off('click');
-        await $('#todo-list').empty();
         await $('#todo-table').animate({ opacity: 0 }, 700).promise();
         await $('#todo-table').css('display', 'none').promise();
+    }
+};
+
+const focusTable = {
+    async show() {
+        await $('#focus-table').css('display', 'block').promise();
+        await $('#focus-table').animate({ opacity: 1 }, 700).promise();
+    },
+    async display(todos) {
+        for (let i = 0; i < todos.length; i++) {
+            await $('#focus-table')
+                .append(
+                    `<tr>
+                <th>${i + 1}</th>
+                <td><div class="detail">${todos[i].detail}</div></td>
+                <td><div class="time">${todos[i].time}</div></td>
+                <td><div class="time" focus-time-id="${i}">——</div></td>
+            </tr>`
+                )
+                .promise();
+        }
+    },
+    async finish(index, time) {
+        await $('#focus-table div[focus-time-id="' + index + '"]')
+            .text(time)
+            .promise();
+    },
+    async hide() {
+        await $('#focus-table').animate({ opacity: 0 }, 700).promise();
+        await $('#focus-table').css('display', 'none').promise();
     }
 };

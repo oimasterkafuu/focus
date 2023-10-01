@@ -28,7 +28,8 @@
     opacity: 0;
 }
 
-#todo-table {
+#todo-table,
+#focus-table {
     display: none;
     opacity: 0;
 }

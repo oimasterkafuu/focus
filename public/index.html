@@ -19,7 +19,7 @@
         </div>
         <div id="dynamic-shape"></div>
 
-        <input id="task-input" placeholder="使用 Enter 键确认" />
+        <input id="task-input" placeholder="使用 Enter 键确认" autocomplete="off" />
         <ul id="hints-list"></ul>
 
         <table id="todo-table" cellspacing="0">
@@ -32,6 +32,21 @@
                 </tr>
             </thead>
             <tbody id="todo-list"></tbody>
+        </table>
+
+        <table id="focus-table" cellspacing="0">
+            <thead>
+                <tr>
+                    <th rowspan="2">序号</th>
+                    <th rowspan="2" class="hasLeftBorder">任务</th>
+                    <th colspan="2" class="hasLeftBorder">分钟</th>
+                </tr>
+                <tr>
+                    <th class="hasLeftBorder special-focus-header">计划</th>
+                    <th class="hasLeftBorder special-focus-header">实际</th>
+                </tr>
+            </thead>
+            <tbody id="focus-list"></tbody>
         </table>
     </body>
 

@@ -10,6 +10,9 @@ body {
     font-size: var(--font-size);
     font-family: var(--font-family);
     font-weight: var(--font-weight);
+
+    width: 100vw;
+    height: 100vh;
 }
 
 #dynamic-shape {
@@ -31,6 +34,7 @@ body {
     transform: translateX(-50%);
     font-size: var(--header-size);
     font-weight: var(--header-font-weight);
+    white-space: nowrap;
 }
 
 #task-input {
@@ -60,34 +64,45 @@ body {
     width: 40vw;
 }
 
-#todo-table {
+#todo-table,
+#focus-table {
     position: absolute;
     left: 50%;
     top: 30%;
     transform: translateX(-50%);
+    border-collapse: collapse;
 }
 
-#todo-table tfoot {
-    margin-top: 30px;
+#todo-table tbody,
+#focus-table tbody,
+.special-focus-header {
+    border-top: 1px solid var(--font-color);
 }
 
 #todo-table th,
-#todo-table td {
+#todo-table td,
+#focus-table th,
+#focus-table td {
     padding: 3px;
     min-width: 5vw;
     text-align: center;
 }
 
 #todo-table td,
-#todo-table th.hasLeftBorder {
+#todo-table th.hasLeftBorder,
+#focus-table td,
+#focus-table th.hasLeftBorder {
     border-left: 1px solid var(--font-color);
 }
 
-#todo-table th {
+#todo-table th,
+#focus-table th {
     font-weight: var(--header-font-weight);
 }
 
-#todo-list input {
+#todo-list input,
+#focus-table div.detail,
+#focus-table td.time {
     font-size: var(--font-size);
     font-family: var(--font-family);
     text-align: center;
@@ -102,7 +117,8 @@ body {
     width: 50vw;
 }
 
-#todo-list input[type='number'] {
+#todo-list input[type='number'],
+#focus-table td.time {
     width: 5vw;
     -moz-appearance: textfield;
     appearance: textfield;
