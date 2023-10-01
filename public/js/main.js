@@ -153,19 +153,19 @@ $(async () => {
             }
         );
         let currTime = 0;
-        let timerMain = async () => {
+        let timerMain = () => {
             currTime++;
-            await focusTimer.set(steps[i].time * 60 - currTime);
+            focusTimer.set(steps[i].time * 60 - currTime);
         };
         let timer = setInterval(timerMain, 1000);
-        let toggleRunning = async () => {
+        let toggleRunning = () => {
             if (timer) {
                 clearInterval(timer);
                 timer = null;
-                await taskInput.update('按下 Enter 键完成，按下空格键继续');
+                taskInput.update('按下 Enter 键完成，按下空格键继续');
             } else {
                 timer = setInterval(timerMain, 1000);
-                await taskInput.update('按下 Enter 键完成，按下空格键暂停');
+                taskInput.update('按下 Enter 键完成，按下空格键暂停');
             }
         };
         addEventListener('keydown', (e) => {
@@ -212,7 +212,6 @@ $(async () => {
 
     await pointCursor();
     $(document.body).click(async () => {
-        await defaultCursor();
         location.reload();
     });
 });
