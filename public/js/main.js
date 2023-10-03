@@ -158,24 +158,22 @@ $(async () => {
             focusTimer.set(steps[i].time * 60 - currTime);
         };
         let timer = setInterval(timerMain, 1000);
-        let toggleRunning = () => {
-            if (timer) {
-                clearInterval(timer);
-                timer = null;
-                taskInput.update('按下 Enter 键完成，按下空格键继续');
-            } else {
-                timer = setInterval(timerMain, 1000);
-                taskInput.update('按下 Enter 键完成，按下空格键暂停');
+        let toggleRunning = (e) => {
+            if (e.key === ' ') {
+                if (timer) {
+                    clearInterval(timer);
+                    timer = null;
+                    taskInput.update('按下 Enter 键完成，按下空格键继续');
+                } else {
+                    timer = setInterval(timerMain, 1000);
+                    taskInput.update('按下 Enter 键完成，按下空格键暂停');
+                }
             }
         };
-        addEventListener('keydown', (e) => {
-            if (e.key === ' ') {
-                toggleRunning();
-            }
-        });
+        addEventListener('keypress', toggleRunning);
         await waitUserEnter();
         if (timer) clearInterval(timer);
-        removeEventListener('keydown', toggleRunning);
+        removeEventListener('keypress', toggleRunning);
         await focusTimer.hide();
         await headerText.sink();
         if (i + 1 < steps.length) {
