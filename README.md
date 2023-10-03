@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://cdn.jsdelivr.net/gh/oimasterkafuu/focus@master/public/logo.png"/><br>
+    <img src="https://cdn.jsdelivr.net/gh/oimasterkafuu/focus@master/public/logo.png" width="512" /><br>
     <strong>Focus | 更智能，更专注</strong>
 </p>
 
