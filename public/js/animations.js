@@ -461,17 +461,23 @@ const focusTimer = {
         let seconds = sec - hours * 3600 - minutes * 60;
 
         let first, second;
+        let units = ['时', '分', '秒'];
+        let uniStart;
         if (hours) {
             first = hours;
             second = minutes;
+            uniStart = 0;
         } else {
             first = minutes;
             second = seconds;
+            uniStart = 1;
         }
 
         second = second < 10 ? '0' + second : second;
         await $('#timer-first').text(first);
         await $('#timer-second').text(second);
+        await $('#timer-first-unit').text(units[uniStart]);
+        await $('#timer-second-unit').text(units[uniStart + 1]);
     },
     async hide() {
         await $('#focus-timer').animate({ opacity: 0 }, 700).promise();

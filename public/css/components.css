@@ -159,3 +159,9 @@ body {
     font-weight: var(--header-font-weight);
     white-space: nowrap;
 }
+
+#timer-first-unit,
+#timer-second-unit {
+    font-size: var(--font-size);
+    font-weight: var(--font-weight);
+}
