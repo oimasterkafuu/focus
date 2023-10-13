@@ -437,15 +437,15 @@ const focusTable = {
 
 const focusTimer = {
     async show() {
-        await $('#focus-timer').css('display', 'block').promise();
-        await $('#focus-timer').animate({ opacity: 1 }, 700).promise();
-
         await $('#timer-negative')
             .css({
                 display: 'none',
                 opacity: 0
             })
             .promise();
+
+        await $('#focus-timer').css('display', 'block').promise();
+        await $('#focus-timer').animate({ opacity: 1 }, 700).promise();
     },
     async set(sec) {
         if (sec === -1) {
